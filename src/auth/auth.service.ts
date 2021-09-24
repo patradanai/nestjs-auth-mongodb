@@ -68,4 +68,10 @@ export class AuthService {
       roles: ['ADMIN'],
     };
   }
+
+  async refreshToken(userId: string): Promise<{ accessToken: string }> {
+    const accessToken = await this.jwtService.sign({ userId: userId });
+
+    return { accessToken };
+  }
 }
