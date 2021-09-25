@@ -21,9 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'accessToken') {
   async validate(payload: JwtPayload) {
     const { userId } = payload;
 
-    const user = await this.userRepository
-      .findById(userId)
-      .select({ _id: 1, roles: 1 });
+    const user = await this.userRepository.findById(userId).select('_id roles');
 
     if (!user) {
       throw new UnauthorizedException();
