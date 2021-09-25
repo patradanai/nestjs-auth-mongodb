@@ -94,7 +94,7 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  async signOut(userId: string, token: string) {
+  async revokeToken(userId: string, token: string) {
     const refreshToken = await this.RefreshTokenRepository.findOne({
       user_id: userId,
       refresh_token: token,

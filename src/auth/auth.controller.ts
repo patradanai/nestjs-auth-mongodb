@@ -7,10 +7,11 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { LocalAuthGuard } from './local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +22,7 @@ export class AuthController {
     return await this.authService.signUp(authCredential);
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('/signin')
   async signIn(@Request() req) {
     return await this.authService.signIn(req.user);
@@ -32,9 +33,9 @@ export class AuthController {
     return await this.authService.refreshToken(req.token, userId);
   }
 
-  @UseGuards(AuthGuard('accessToken'))
-  @Delete('/signout')
+  @UseGuards(JwtAuthGuard)
+  @Delete('/revoke-token')
   async signOut(@Body() params, @Request() req) {
-    return await this.authService.signOut(req.user, params.token);
+    return await this.authService.revokeToken(req.user, params.token);
   }
 }
