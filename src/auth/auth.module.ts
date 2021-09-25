@@ -9,10 +9,11 @@ import {
 } from './schemas/refresh-token.schema';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { LocalStrategy } from './local.strategy';
+import { LocalStrategy } from './strategy/local.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtAuthGuard } from './guard/jwt-auth.guard';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { RoleModule } from 'src/role/role.module';
 
 @Module({
   providers: [
@@ -35,6 +36,7 @@ import { JwtStrategy } from './jwt.strategy';
       { name: User.name, schema: UserSchema },
       { name: RefreshToken.name, schema: RefreshTokenSchema },
     ]),
+    RoleModule,
   ],
   controllers: [AuthController],
 })

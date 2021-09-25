@@ -15,6 +15,7 @@ import { User, UserDocument } from 'src/auth/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { requestWithUser, responseWithUser } from './interfaces/user.interface';
 import { RefreshDocument, RefreshToken } from './schemas/refresh-token.schema';
+import { RoleService } from 'src/role/role.service';
 
 @Injectable()
 export class AuthService {
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly UserRepository: Model<UserDocument>,
     @InjectModel(RefreshToken.name)
     private readonly RefreshTokenRepository: Model<RefreshDocument>,
+    private readonly roleService: RoleService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -35,6 +37,11 @@ export class AuthService {
       username,
       email,
       password: hashedPassword,
+    });
+
+    // Add Role
+    await this.roleService.findByName('CUSTOMER').then((role) => {
+      user.roles.push(role._id);
     });
 
     try {

@@ -8,14 +8,13 @@ import {
   Delete,
   Get,
 } from '@nestjs/common';
-import { Roles } from 'src/role/role.decorator';
+import { Roles } from 'src/role/decorator/role.decorator';
 import { Role } from 'src/role/role.interface';
-import { Auth } from './auth.decorator';
+import { Auth } from './decorator/auth.decorator';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalAuthGuard } from './guard/local-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -40,7 +39,7 @@ export class AuthController {
   @Auth()
   @Delete('/revoke-token')
   async signOut(@Body() params, @Request() req) {
-    return await this.authService.revokeToken(req.user, params.token);
+    return await this.authService.revokeToken(req.user._id, params.token);
   }
 
   @Get('/profile')

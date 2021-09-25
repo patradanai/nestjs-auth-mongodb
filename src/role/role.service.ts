@@ -6,6 +6,11 @@ import { Role, RoleDocument } from './schemas/role.schema';
 @Injectable()
 export class RoleService {
   constructor(
-    @InjectModel(Role.name) private readonly RoleModel: Model<RoleDocument>,
+    @InjectModel(Role.name)
+    private readonly RoleRepository: Model<RoleDocument>,
   ) {}
+
+  async findByName(name: string): Promise<RoleDocument> {
+    return this.RoleRepository.findOne({ name: name });
+  }
 }

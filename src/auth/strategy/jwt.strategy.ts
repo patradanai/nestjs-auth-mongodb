@@ -2,9 +2,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument } from './schemas/user.schema';
+import { User, UserDocument } from '../schemas/user.schema';
 import { Model } from 'mongoose';
-import { JwtPayload } from './interfaces/user.interface';
+import { JwtPayload } from '../interfaces/user.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'accessToken') {
@@ -21,12 +21,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'accessToken') {
   async validate(payload: JwtPayload) {
     const { userId } = payload;
 
-    const user = await this.userRepository.findById(userId);
+    const user = await this.userRepository
+      .findById(userId)
+      .select({ _id: 1, roles: 1 });
 
     if (!user) {
       throw new UnauthorizedException();
     }
-
-    return userId;
+    console.log(user);
+    return user;
   }
 }
