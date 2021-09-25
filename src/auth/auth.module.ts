@@ -9,12 +9,22 @@ import {
 } from './schemas/refresh-token.schema';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  providers: [AuthService, JwtStrategy, LocalStrategy],
-  exports: [JwtStrategy, PassportModule],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
+  exports: [PassportModule],
   imports: [
     PassportModule.register({ defaultStrategy: 'accessToken' }),
     JwtModule.register({

@@ -6,7 +6,11 @@ import {
   Request,
   Param,
   Delete,
+  Get,
 } from '@nestjs/common';
+import { Roles } from 'src/role/role.decorator';
+import { Role } from 'src/role/role.interface';
+import { Auth } from './auth.decorator';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -33,9 +37,16 @@ export class AuthController {
     return await this.authService.refreshToken(req.token, userId);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Auth()
   @Delete('/revoke-token')
   async signOut(@Body() params, @Request() req) {
     return await this.authService.revokeToken(req.user, params.token);
+  }
+
+  @Get('/profile')
+  @Auth()
+  @Roles(Role.ADMIN)
+  profile() {
+    console.log('ADMIN');
   }
 }
