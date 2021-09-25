@@ -39,9 +39,6 @@ export class User {
 
   @Prop({ type: [Types.ObjectId], ref: 'Role' })
   roles: Role[];
-
-  @Prop({ type: [Types.ObjectId], ref: 'RefreshToken' })
-  refresh_tokens: RefreshToken[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

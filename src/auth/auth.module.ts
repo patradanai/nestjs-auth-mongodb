@@ -11,16 +11,15 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
-import { JwtStrategyRefresh } from './jwt-refresh.strategy';
 
 @Module({
-  providers: [AuthService, JwtStrategy, LocalStrategy, JwtStrategyRefresh],
+  providers: [AuthService, JwtStrategy, LocalStrategy],
   exports: [JwtStrategy, PassportModule],
   imports: [
     PassportModule.register({ defaultStrategy: 'accessToken' }),
     JwtModule.register({
       secret: 'AS210d#!@!slsdm1_3!@!=123x,,l#',
-      signOptions: { expiresIn: '3600' },
+      signOptions: { expiresIn: 3600 },
     }),
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },

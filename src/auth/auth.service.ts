@@ -1,9 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import * as dayjs from 'dayjs';
+import { v4 as uuid } from 'uuid';
 import { User, UserDocument } from 'src/auth/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { requestWithUser, responseWithUser } from './interfaces/user.interface';
@@ -45,20 +52,13 @@ export class AuthService {
     const accessToken: string = await this.jwtService.sign({
       userId: req.userId,
     });
-    const refreshToken: string = await this.jwtService.sign(
-      {
-        userId: req.userId,
-      },
-      { expiresIn: '7d' },
-    );
+    const refreshToken = uuid();
 
+    // Gen Refresh token new
     await this.RefreshTokenRepository.create({
+      user_id: req.userId,
       refresh_token: refreshToken,
-      expiredAt: dayjs().add(7, 'dayjs'),
-    }).then(async (res) => {
-      await this.UserRepository.findByIdAndUpdate(req.userId, {
-        $push: { refresh_tokens: res._id },
-      });
+      expiredAt: dayjs().add(7, 'days'),
     });
 
     return {
@@ -69,9 +69,44 @@ export class AuthService {
     };
   }
 
-  async refreshToken(userId: string): Promise<{ accessToken: string }> {
-    const accessToken = await this.jwtService.sign({ userId: userId });
+  async refreshToken(
+    token: string,
+    id: string,
+  ): Promise<{ accessToken: string; refreshToken?: string }> {
+    if (!Types.ObjectId.isValid(id)) throw new UnauthorizedException();
 
-    return { accessToken };
+    const refreshModel: RefreshToken =
+      await this.RefreshTokenRepository.findOne({
+        user_id: id,
+        refresh_token: token,
+        revoke: false,
+        expiredAt: { $gte: new Date() },
+      });
+
+    if (!refreshModel) {
+      throw new UnauthorizedException('Refresh Token Invalid');
+    }
+
+    const accessToken = await this.jwtService.sign({ userId: id });
+
+    const refreshToken = refreshModel.refresh_token;
+
+    return { accessToken, refreshToken };
+  }
+
+  async signOut(userId: string, token: string) {
+    const refreshToken = await this.RefreshTokenRepository.findOne({
+      user_id: userId,
+      refresh_token: token,
+      revoke: false,
+    });
+
+    if (!refreshToken) throw new NotFoundException();
+
+    refreshToken.revoke = true;
+
+    await refreshToken.save();
+
+    return { statusCode: HttpStatus.OK, message: 'Successful' };
   }
 }
