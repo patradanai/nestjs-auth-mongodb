@@ -5,6 +5,13 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { PermissionModule } from './permission/permission.module';
 import { RoleModule } from './role/role.module';
+import { CompanyModule } from './company/company.module';
+import { DocumentModule } from './document/document.module';
+import { TransactionModule } from './transaction/transaction.module';
+import { OrderModule } from './order/order.module';
+import { PackageModule } from './package/package.module';
+import { BatchFileModule } from './batch-file/batch-file.module';
+import { JobFileModule } from './job-file/job-file.module';
 
 @Module({
   imports: [
@@ -12,6 +19,13 @@ import { RoleModule } from './role/role.module';
     AuthModule,
     PermissionModule,
     RoleModule,
+    CompanyModule,
+    DocumentModule,
+    TransactionModule,
+    OrderModule,
+    PackageModule,
+    BatchFileModule,
+    JobFileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
