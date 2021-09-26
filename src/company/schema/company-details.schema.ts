@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { CompanyBranch } from './company-branch.schema';
 
 export type CompanyDetailsDocument = CompanyDetails & Document;
 
 @Schema()
 export class CompanyDetails {
-  @Prop({ type: [Types.ObjectId], ref: 'CompanyBranch' })
+  @Prop({ type: Types.ObjectId, ref: CompanyBranch.name })
   company_branch_id: string;
 
   @Prop()

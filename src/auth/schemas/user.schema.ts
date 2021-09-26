@@ -1,7 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { RefreshToken } from './refresh-token.schema';
-import { Role } from '../../role/schemas/role.schema';
+import { Role } from '../../role/schema/role.schema';
 
 export type UserDocument = User & Document;
 
@@ -37,7 +36,7 @@ export class User {
   @Prop({ default: Date.now })
   updatedAt: Date;
 
-  @Prop({ type: [Types.ObjectId], ref: 'Role' })
+  @Prop({ type: [Types.ObjectId], ref: Role.name })
   roles: Role[];
 }
 

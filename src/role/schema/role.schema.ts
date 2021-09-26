@@ -7,9 +7,6 @@ export type RoleDocument = Role & Document;
 
 @Schema()
 export class Role {
-  @Prop({ type: Types.ObjectId })
-  _id: Types.ObjectId;
-
   @Prop({ required: true })
   name: string;
 
@@ -25,10 +22,7 @@ export class Role {
   @Prop({ required: true })
   updatedAt: Date;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
-  users: User[];
-
-  @Prop({ type: [Types.ObjectId], ref: 'Permission' })
+  @Prop({ type: [Types.ObjectId], ref: Permission.name })
   permission: Permission[];
 }
 

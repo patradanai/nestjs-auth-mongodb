@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Role, RoleSchema } from './schemas/role.schema';
+import { Role, RoleSchema } from './schema/role.schema';
 import { RoleService } from './role.service';
 import { RolesGuard } from './guard/role.gurad';
 

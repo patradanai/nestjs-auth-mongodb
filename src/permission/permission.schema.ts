@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Role } from '../role/schemas/role.schema';
+import { Role } from '../role/schema/role.schema';
 
 export type PermissionDocument = Permission & Document;
 

@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { User } from 'src/auth/schemas/user.schema';
 
 export type CompanyDocument = Company & Document;
 
 @Schema()
 export class Company {
-  @Prop({ type: [Types.ObjectId], ref: 'User' })
+  @Prop({ type: Types.ObjectId, ref: User.name })
   user_id: string;
 
   @Prop()

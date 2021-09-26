@@ -5,7 +5,7 @@ export type CompanyAddressDocument = CompanyAddress & Document;
 
 @Schema()
 export class CompanyAddress {
-  @Prop({ type: [Types.ObjectId], ref: 'CompanyBranch' })
+  @Prop({ type: Types.ObjectId, ref: CompanyAddress.name })
   company_detail_id: string;
 
   @Prop()
