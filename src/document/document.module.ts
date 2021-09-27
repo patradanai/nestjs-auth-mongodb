@@ -4,8 +4,8 @@ import { DocumentController } from './document.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { DocumentMaster, DocumentMasterSchema } from './schema/document.scheme';
 import {
-  DocumentType,
-  DocumentTypeSchema,
+  DocumentFileType,
+  DocumentFileTypeSchema,
 } from './schema/documnet-type.schema';
 import {
   DocumentSeller,
@@ -24,7 +24,7 @@ import {
   imports: [
     MongooseModule.forFeature([
       { name: DocumentMaster.name, schema: DocumentMasterSchema },
-      { name: DocumentType.name, schema: DocumentTypeSchema },
+      { name: DocumentFileType.name, schema: DocumentFileTypeSchema },
       { name: DocumentSeller.name, schema: DocumentSellerSchema },
       { name: DocumentBuyer.name, schema: DocumentBuyerSchema },
       { name: DocumentProduct.name, schema: DocumentProductSchema },

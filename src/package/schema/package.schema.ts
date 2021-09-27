@@ -1,12 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type DocumentFileTypeDocument = DocumentFileType & Document;
+export type PackageAppDocument = PackageApp & Document;
 
 @Schema()
-export class DocumentFileType {
+export class PackageApp {
   @Prop({ required: true })
   name: string;
+
+  @Prop()
+  status: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;
@@ -15,5 +18,4 @@ export class DocumentFileType {
   updatedAt: Date;
 }
 
-export const DocumentFileTypeSchema =
-  SchemaFactory.createForClass(DocumentFileType);
+export const PackageAppSchema = SchemaFactory.createForClass(PackageApp);

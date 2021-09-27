@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Company } from 'src/company/schema/company.schema';
-import { DocumentType } from './documnet-type.schema';
+import { DocumentFileType } from './documnet-type.schema';
 
 export type DocumentMasterDocument = DocumentMaster & Document;
 

@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Company } from 'src/company/schema/company.schema';
 import { BatchFileType } from './batch-file-type.schema';
-import { DocumentType } from '../../document/schema/documnet-type.schema';
+import { DocumentFileType } from '../../document/schema/documnet-type.schema';
 
 export type BatchFileDocument = BatchFile & Document;
 
