@@ -10,9 +10,9 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
-import { Roles } from 'src/role/decorator/role.decorator';
+import { RequireRoles } from 'src/role/decorator/role.decorator';
 import { Role } from 'src/role/role.interface';
-import { Auth } from './decorator/auth.decorator';
+import { RequireAuth } from './decorator/auth.decorator';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
@@ -46,15 +46,15 @@ export class AuthController {
     return await this.authService.refreshToken(req.token, userId);
   }
 
-  @Auth()
+  @RequireAuth()
   @Delete('/revoke-token')
   async signOut(@Body() params, @Request() req) {
     return await this.authService.revokeToken(req.user._id, params.token);
   }
 
   @Get('/profile')
-  @Auth()
-  @Roles(Role.ADMIN)
+  @RequireAuth()
+  @RequireRoles(Role.ADMIN)
   profile() {
     console.log('ADMIN');
   }
