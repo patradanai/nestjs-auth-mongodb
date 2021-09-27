@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { BatchFile } from 'src/batch-file/schema/batch-file.schema';
 import { Company } from 'src/company/schema/company.schema';
+import { JobFile } from 'src/job-file/schema/job-file.schema';
 import { DocumentFileType } from './documnet-type.schema';
 
 export type DocumentMasterDocument = DocumentMaster & Document;
@@ -10,13 +12,13 @@ export class DocumentMaster {
   @Prop({ type: [Types.ObjectId], ref: Company.name })
   company_id: string;
 
-  @Prop({ type: [Types.ObjectId], ref: 'BatchFile' })
+  @Prop({ type: [Types.ObjectId], ref: BatchFile.name })
   batch_file_id: string;
 
-  @Prop({ type: [Types.ObjectId], ref: 'JobFile' })
+  @Prop({ type: [Types.ObjectId], ref: JobFile.name })
   job_file_id: string;
 
-  @Prop({ type: [Types.ObjectId], ref: DocumentType.name })
+  @Prop({ type: [Types.ObjectId], ref: DocumentFileType.name })
   documnet_type_id: string;
 
   @Prop()

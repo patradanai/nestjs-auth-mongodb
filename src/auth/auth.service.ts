@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   HttpStatus,
   Injectable,
   NotFoundException,
@@ -8,51 +7,26 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
 import * as dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
-import { User, UserDocument } from 'src/auth/schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { requestWithUser, responseWithUser } from './interfaces/user.interface';
 import { RefreshDocument, RefreshToken } from './schemas/refresh-token.schema';
-import { RoleService } from 'src/role/role.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name)
-    private readonly UserRepository: Model<UserDocument>,
     @InjectModel(RefreshToken.name)
     private readonly RefreshTokenRepository: Model<RefreshDocument>,
-    private readonly roleService: RoleService,
+    private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
 
   async signUp(AuthCredential: CreateUserDto): Promise<void> {
     const { username, password, email } = AuthCredential;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = new this.UserRepository({
-      username,
-      email,
-      password: hashedPassword,
-    });
-
-    // Add Role
-    await this.roleService.findByName('CUSTOMER').then((role) => {
-      user.roles.push(role._id);
-    });
-
-    try {
-      await user.save();
-    } catch (err) {
-      if (err.code === 11000) {
-        throw new ConflictException('User already exists');
-      }
-
-      throw err;
-    }
+    await this.userService.createUserWithDefault(username, password, email);
   }
 
   async signIn(req: requestWithUser): Promise<responseWithUser> {

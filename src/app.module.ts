@@ -12,6 +12,7 @@ import { OrderModule } from './order/order.module';
 import { PackageModule } from './package/package.module';
 import { BatchFileModule } from './batch-file/batch-file.module';
 import { JobFileModule } from './job-file/job-file.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JobFileModule } from './job-file/job-file.module';
     PackageModule,
     BatchFileModule,
     JobFileModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Get,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { Roles } from 'src/role/decorator/role.decorator';
 import { Role } from 'src/role/role.interface';
@@ -15,14 +17,22 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { LocalAuthGuard } from './guard/local-auth.guard';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  async signUp(@Body() authCredential: CreateUserDto) {
-    return await this.authService.signUp(authCredential);
+  async signUp(
+    @Body() authCredential: CreateUserDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.signUp(authCredential);
+
+    response.status(HttpStatus.OK);
+
+    return { StatusCode: HttpStatus.OK, message: 'Created User Success' };
   }
 
   @UseGuards(LocalAuthGuard)

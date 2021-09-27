@@ -29,7 +29,7 @@ export class BatchFile {
   @Prop({ type: [Types.ObjectId], ref: BatchFileType.name })
   batch_type_id: string;
 
-  @Prop({ type: [Types.ObjectId], ref: DocumentType.name })
+  @Prop({ type: [Types.ObjectId], ref: DocumentFileType.name })
   document_type_id: string;
 }
 
